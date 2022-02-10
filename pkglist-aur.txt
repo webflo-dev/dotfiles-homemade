@@ -1,0 +1,10 @@
+autotiling
+hdx-realtime-media-engine
+icaclient
+microsoft-edge-stable-bin
+noto-color-emoji-fontconfig
+spotify
+ttf-windows
+visual-studio-code-bin
+wlsunset
+wob

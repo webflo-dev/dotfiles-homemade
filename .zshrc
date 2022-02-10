@@ -177,6 +177,12 @@ function dotfiles-add () {
    fi
 }
 
+function pkg-backup () {
+  comm -12 <(grep -Poe '\[ALPM\] installed \K\S*' /var/log/pacman.log | sort | uniq) <(pacman -Qeqn | sort) > ~/pkglist-distro.txt
+  comm -12 <(grep -Poe '\[ALPM\] installed \K\S*' /var/log/pacman.log | sort | uniq) <(pacman -Qeqm | sort) > ~/pkglist-aur.txt
+  cat ~/pkglist-distro.txt ~/pkglist-aur.txt > ~/pkglist.txt
+}
+
 # Create a new directory and enter it
 function mkcd() {
    mkdir -p "$@" && cd "$_";

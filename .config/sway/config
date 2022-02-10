@@ -127,6 +127,14 @@ floating_modifier       	Mod4
 #---------------------------------------------------------------------------
 
 
+#---- TERMINAL ------------------------------------------------------
+set $term                   foot -c ~/.config/foot/foot.ini -c ~/.config/foot/themes/dracula 
+set $term_cwd               $term -D "$(swaycwd 2>/dev/null || echo $HOME)"
+set $term_float             footclient -a floating_shell
+set $term_float_portrait    footclient -a floating_shell_portrait
+#---------------------------------------------------------------------------
+
+
 #---- General Keybinds ------------------------------------------------------
 set
 {
@@ -158,8 +166,8 @@ set $focus_ws [ $focus_after_move == 'true' ] && swaymsg workspace
 
 $bindsym
 {
-    $layer1+Return          exec terminator --working-directory="$(swaycd 2>/dev/null)"
-    $layer2+Return			exec terminator
+    $layer1+Return          exec $term_cwd
+    $layer2+Return			exec $term
     $layer2+q               kill
 
 	$layer2+c				reload
@@ -470,7 +478,7 @@ exec {
     '[ -x "$(command -v flashfocus)" ] && flashfocus'
     '[ -x "$(command -v wlsunset)" ] && ~/.config/sway/scripts/sunset.sh "on"'
     '[ -x "$(command -v autotiling)" ] && autotiling'
-    '[ -x "$(command -v foot)" ] && ~/.config/sway/scripts/foot.sh --server'
+    '[ -x "$(command -v foot)" ] && foot --server'
     '[ -x "$(command -v nwg-wrapper)" ] && [ -f ~/.config/nwg-wrapper/help.sh ] && ~/.config/sway/scripts/help.sh --restore'
     '[ -x "$(command -v wl-paste)" ] && [ -x "$(command -v cliphist)" ] && wl-paste --watch cliphist store'
     '[ -x "$(command -v wl-paste)" ] && [ -x "$(command -v cliphist)" ] && wl-paste --watch pkill -RTMIN+9 waybar'
@@ -479,6 +487,24 @@ exec {
 
 
 #---- Sepcial Window rules  ------------------------------------------------------
+for_window [instance="lxappearance"] floating enable
+for_window [app_id="pamac-manager"] floating enable
+for_window [app_id="blueberry.py"] floating enable
+for_window [app_id="firefox" title="^Library$"] floating enable, border pixel 1, sticky enable
+for_window [app_id="thunderbird" title=".*Reminder"] floating enable
+for_window [app_id="floating_shell_portrait"] floating enable, border pixel 1, sticky enable, resize set width 30 ppt height 40 ppt
+for_window [app_id="floating_shell"] floating enable, border pixel 1, sticky enable
+for_window [app_id="Manjaro.manjaro-settings-manager"] floating enable
+for_window [app_id="" title="Picture in picture"] floating enable, sticky enable
+for_window [app_id="" title="Picture-in-Picture"] floating enable, sticky enable
+for_window [instance="around"] floating enable, sticky enable
+for_window [app_id="xsensors"] floating enable
+for_window [title="Save File"] floating enable
+for_window [title="Firefox — Sharing Indicator"] floating enable
+for_window [app_id="" title=".* is sharing your screen."] floating enable
+for_window [title="^wlay$"] floating enable
+
+
 assign [class="Code" instance="code"] $ws1
 for_window [class="Code" instance="code"] focus
 

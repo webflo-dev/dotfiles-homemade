@@ -1,0 +1,26 @@
+# Dracula
+
+[cursor]
+#color=282a36 f8f8f2
+
+[colors]
+alpha=0.9
+foreground=d3d7cf
+background=282a36
+regular0=2e3436  # black
+regular1=ff5555  # red
+regular2=50fa7b  # green
+regular3=f1fa8c  # yellow
+regular4=6272a4  # blue
+regular5=ff79c6  # magenta
+regular6=8be9fd  # cyan
+regular7=d3d7cf  # white
+bright0=555753   # bright black
+bright1=ff5555   # bright red
+bright2=50fa7b   # bright green
+bright3=f1fa8c   # bright yellow
+bright4=729fcf   # bright blue
+bright5=ff79c6   # bright magenta
+bright6=8be9fd   # bright cyan
+bright7=eeeeec   # bright white
+

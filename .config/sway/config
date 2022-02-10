@@ -1,0 +1,506 @@
+# only enable this if every app you use is compatible with wayland
+# xwayland disable
+
+#--- Input/Outputs --------------------------------------------------------
+input * {
+    xkb_layout "fr"
+}
+input type:touchpad {
+    dwt enabled
+    tap enabled
+    natural_scroll disabled
+    middle_emulation disabled
+    drag enabled
+    click_method clickfinger
+}
+#---------------------------------------------------------------------------
+
+
+#--- Include --------------------------------------------------------------
+# set $background		#3e6656
+# set $foreground		#d1c29d
+# set $selection		#6272a4
+# set $unfocused		#44475a
+
+set $background		#2A7ABF
+set $foreground		#BFA34E
+set $selection		#88C9F2
+set $unfocused		#348ABF
+
+set $cyan		    #689d6a
+set $green		    #98971a
+set $orange		    #d65d0e
+set $pink		    #FF5370
+set $purple		    #b16286
+set $red		    #bf6374
+set $yellow		    #d79921
+set $dark           #323732
+#---------------------------------------------------------------------------
+
+
+#--- Font ------------------------------------------------------------------
+set $font           "Noto Sans Regular 10"
+#---------------------------------------------------------------------------
+
+
+#--- GUI -------------------------------------------------------------------
+exec_always ~/.config/sway/scripts/import-gsettings
+#---------------------------------------------------------------------------
+
+
+#--- Window Decortations ---------------------------------------------------
+set
+{
+   	$border      	3
+  	$nofocus     	$background
+	$focus       	$foreground
+	$titletxt    	$dark
+	$titlepad		3	
+	$gaps_inner  	10
+	$gaps_outer  	10
+}
+#---------------------------------------------------------------------------
+
+
+#-- Wallpapers -------------------------------------------------------------
+set $wallpaper      ~/Pictures/macos-bigsur-3840x2160-day-mountains-wwdc-2019-5k-21590.jpg
+exec swaybg -i $wallpaper -m fill
+#---------------------------------------------------------------------------
+
+
+#--- Colors ----------------------------------------------------------------
+# Property Name         Border      BG          Text        Indicator   Child Border
+client.focused          $focus      $focus      $titletxt   $focus      $focus
+client.focused_inactive $nofocus    $nofocus    $titletxt   $nofocus    $nofocus
+client.unfocused        $nofocus    $nofocus    $titletxt   $nofocus    $nofocus
+client.urgent           $nofocus    $nofocus    $titletxt   $nofocus    $nofocus
+#---------------------------------------------------------------------------
+
+
+#--- Bars ------------------------------------------------------------------
+bar {
+    id default
+    swaybar_command waybar
+}
+#---------------------------------------------------------------------------
+
+
+#--- Gaps ------------------------------------------------------------------
+gaps inner $gaps_inner
+gaps outer $gaps_outer
+smart_gaps on
+#---------------------------------------------------------------------------
+
+
+#--- Titlebar --------------------------------------------------------------
+font $font
+# for_window [title="."] title_format "%title"
+for_window [shell="xdg_shell"] title_format "%title (%app_id)"
+for_window [shell="x_wayland"] title_format "%class - %title"
+titlebar_border_thickness 0
+titlebar_padding $titlepad $titlepad
+title_align center
+#---------------------------------------------------------------------------
+
+
+#--- Default Borders -------------------------------------------------------
+default_floating_border	pixel	$border
+default_border			pixel	$border
+smart_borders on
+hide_edge_borders smart
+#---------------------------------------------------------------------------
+
+
+
+#--- Utilities -------------------------------------------------------
+set $WOBSOCK $XDG_RUNTIME_DIR/wob.sock
+#---------------------------------------------------------------------------
+
+
+#--- Floating rules -------------------------------------------------------
+# focus_follows_mouse     	yes
+focus_follows_mouse     	no
+focus_wrapping          	false
+popup_during_fullscreen 	leave_fullscreen
+floating_modifier       	Mod4
+#floating_modifier       	Mod4 normal
+#---------------------------------------------------------------------------
+
+
+#---- General Keybinds ------------------------------------------------------
+set
+{
+    $bindsym        bindsym --to-code
+	$unbindsym      unbindsym --to-code
+    $layer1			Mod4
+	$layer2			Mod4+Shift
+}
+
+set $left h
+set $down j
+set $up k
+set $right l
+
+# workspace names
+set $ws1 number 1
+set $ws2 number 2
+set $ws3 number 3
+set $ws4 number 4
+set $ws5 number 5
+set $ws6 number 6
+set $ws7 number 7
+set $ws8 number 8
+set $ws9 number 9
+set $ws10 number 10
+
+set $focus_after_move true
+set $focus_ws [ $focus_after_move == 'true' ] && swaymsg workspace
+
+$bindsym
+{
+    $layer1+Return          exec terminator --working-directory="$(swaycd 2>/dev/null)"
+    $layer2+Return			exec terminator
+    $layer2+q               kill
+
+	$layer2+c				reload
+
+
+    # Move your focus around
+    $layer1+$left           focus left
+    $layer1+$down           focus down
+    $layer1+$up             focus up
+    $layer1+$right          focus right
+    # Or use $mod+[up|down|left|right]
+    # $layer1+Left            focus left
+    # $layer1+Down            focus down
+    # $layer1+Up              focus up
+    # $layer1+Right           focus right
+
+    # Move the focused window with the same, but add Shift
+    $layer2+$left           move left
+    $layer2+$down           move down
+    $layer2+$up             move up
+    $layer2+$right          move right
+    # Ditto, with arrow keys
+    # $layer2+Left            move left
+    # $layer2+Down            move down
+    # $layer2+Up              move up
+    # $layer2+Right           move right
+
+	$layer1+left            workspace prev
+	$layer1+right           workspace next
+	$layer2+left            move container to workspace prev
+	$layer2+right           move container to workspace next
+  	$layer2+down 			move scratchpad
+	$layer2+up 			    scratchpad show
+  	$layer1+up 			    floating toggle
+
+
+
+    $layer1+ampersand       workspace $ws1
+    $layer1+eacute          workspace $ws2
+    $layer1+quotedbl        workspace $ws3
+    $layer1+apostrophe      workspace $ws4
+    $layer1+parenleft       workspace $ws5
+    $layer1+minus           workspace $ws6
+    $layer1+egrave          workspace $ws7
+    $layer1+underscore      workspace $ws8
+    # $layer1+ccedilla        workspace $ws9
+    # $layer1+agrave          workspace $ws10
+
+    # Move focused container to workspace
+    $layer2+ampersand       move container to workspace $ws1, exec $focus_ws $ws1
+    $layer2+eacute          move container to workspace $ws2, exec $focus_ws $ws2
+    $layer2+quotedbl        move container to workspace $ws3, exec $focus_ws $ws3
+    $layer2+apostrophe      move container to workspace $ws4, exec $focus_ws $ws4
+    $layer2+parenleft       move container to workspace $ws5, exec $focus_ws $ws5
+    $layer2+minus           move container to workspace $ws6, exec $focus_ws $ws6
+    $layer2+egrave          move container to workspace $ws7, exec $focus_ws $ws7
+    $layer2+underscore      move container to workspace $ws8, exec $focus_ws $ws8
+    $layer2+ccedilla        move container to workspace $ws9, exec $focus_ws $ws9
+    $layer2+agrave          move container to workspace $ws10, exec $focus_ws $ws10
+
+  	$layer1+b               splith
+  	$layer1+v               splitv
+
+    $layer1+s 			    layout stacking
+  	$layer1+w 			    layout tabbed
+  	$layer1+e 			    layout toggle split
+
+  	$layer1+f 			    fullscreen
+
+  	$layer2+space 			floating toggle
+	$layer1+space 			focus mode_toggle
+
+  	$layer1+a 			    focus parent
+  	$layer1+z 			    focus child
+
+    # scratchpad
+    $layer1+F9              scratchpad show
+    $layer2+F9              move scratchpad
+
+    # Locking
+    $layer1+f1              exec ~/.config/sway/scripts/lockman.sh
+
+    # MenuD
+    $layer1+d               exec wofi -c ~/.config/wofi/config -I
+    
+    # Activities
+    $layer1+p               exec ~/.config/wofi/windows.py
+
+    $layer1+period          exec rofi -show emoji -modi emoji
+}
+#---------------------------------------------------------------------------
+
+
+#---- Utilities keybinds------------------------------------------------------
+
+# audio control
+set $sink_volume pactl get-sink-volume @DEFAULT_SINK@ | grep '^Volume:' | cut -d / -f 2 | tr -d ' ' | sed 's/%//'
+set $source_volume pactl get-source-volume @DEFAULT_SOURCE@ | grep '^Volume:' | cut -d / -f 2 | tr -d ' ' | sed 's/%//'
+set $volume_down $(pactl set-sink-volume @DEFAULT_SINK@ -5% && $sink_volume) > $WOBSOCK
+set $volume_up $(pactl set-sink-volume @DEFAULT_SINK@ +5% && $sink_volume) > $WOBSOCK
+set $volume_mute $(pactl set-sink-mute @DEFAULT_SINK@ toggle && pactl get-sink-mute @DEFAULT_SINK@ | sed -En "/no/ s/.*/$($sink_volume)/p; /yes/ s/.*/0/p") > $WOBSOCK
+set $mic_mute $(pactl set-source-mute @DEFAULT_SOURCE@ toggle && pactl get-source-mute @DEFAULT_SOURCE@ | sed -En "/no/ s/.*/$($source_volume)/p; /yes/ s/.*/0/p") > $WOBSOCK
+
+$bindsym
+{
+    # audio control
+    # XF86AudioRaiseVolume    pamixer -ui 2 && pamixer --get-volume > $WOBSOCK
+    # XF86AudioLowerVolume    pamixer -ud 2 && pamixer --get-volume > $WOBSOCK
+    # XF86AudioMute           pamixer --toggle-mute && ( pamixer --get-mute && echo 0 > $WOBSOCK ) || pamixer --get-volume > $WOBSOCK
+    XF86AudioRaiseVolume    exec $volume_up
+    XF86AudioLowerVolume    exec $volume_down
+    XF86AudioMute           exec $volume_mute
+    XF86AudioMicMute        exec $mic_mute
+
+    # brightness control
+    XF86MonBrightnessDown   exec brightnessctl set 5%- | sed -En 's/.*\(([0-9]+)%\).*/\1/p' > $WOBSOCK
+    XF86MonBrightnessUp     exec brightnessctl set +5% | sed -En 's/.*\(([0-9]+)%\).*/\1/p' > $WOBSOCK
+
+    XF86AudioPlay           exec playerctl play-pause
+    XF86AudioNext           exec playerctl next
+    XF86AudioPrev           exec playerctl previous
+}
+#---------------------------------------------------------------------------
+
+
+#---- Mode resize ------------------------------------------------------
+set $mode_resize "<span></span>  \
+<span><b>Resize</b></span> <span>(<b>↑ ↓ ← →</b>)</span> \
+<span><b>Increase Gaps</b></span> <span>(<b>+</b>)</span> \
+<span><b>Decrease Gaps</b></span> <span>(<b>-</b>)</span>"
+
+mode --pango_markup $mode_resize {
+    $bindsym
+    {
+        $left           resize shrink width 10px
+        $right          resize grow width 10px
+        $up             resize shrink height 10px
+        $down           resize grow height 10px
+
+        # Ditto, with arrow keys
+        Left            resize shrink width 10px
+        Right           resize grow width 10px
+        Up              resize shrink height 10px
+        Down            resize grow height 10px
+
+        Shift+$left     resize shrink width 10px
+        Shift+$right    resize grow width 10px
+        Shift+$up       resize shrink height 10px
+        Shift+$down     resize grow height 10px
+
+        # Ditto, with arrow keys
+        Shift+Left      resize shrink width 10px
+        Shift+Right     resize grow width 10px
+        Shift+Up        resize shrink height 10px
+        Shift+Down      resize grow height 10px
+
+        ## Resize // Window Gaps // + - ##
+        minus           gaps inner current minus 5px
+        plus            gaps inner current plus 5px
+
+        # Return to default mode
+        Return          mode "default"
+        Escape          mode "default"
+    }
+}
+#---------------------------------------------------------------------------
+
+
+#---- Mode recording  ------------------------------------------------------
+set $mode_recording "<span></span>  \
+<span><b>Record</b></span> <span>(<b>r</b>)</span> \
+<span>+ [<span><b>Shift</b></span> for ]</span>"
+
+set $recorder ~/.config/sway/scripts/recorder.sh
+
+mode --pango_markup $mode_recording {
+    $bindsym
+    {
+        r               exec $recorder, mode "default"
+        Shift+r         exec $recorder -a, mode "default"
+
+        Escape          mode "default"
+    }
+}
+#---------------------------------------------------------------------------
+
+
+#---- Mode screenshot  ------------------------------------------------------
+set $grimshot ~/.config/sway/scripts/grimshot
+set $screenshot_screen_clipboard $grimshot --notify copy output
+set $screenshot_screen_file $grimshot --notify save output
+set $screenshot_selection_clipboard $grimshot --notify copy window
+set $screenshot_selection_file $grimshot --notify save window
+
+set $mode_screenshot "<span></span>  \
+<span><b>Pick</b></span> <span>(<b>p</b>)</span> \
+<span><b>Output</b></span> <span>(<b>o</b>)</span> \
+<span>+ <span><b>Shift</b></span> for </span>"
+
+mode --pango_markup $mode_screenshot {
+    $bindsym
+    {
+        # output = currently active output
+        o               mode "default", exec $screenshot_screen_clipboard
+        Shift+o         mode "default", exec $screenshot_screen_file
+
+        # pick the region to screenshot
+        p               mode "default", exec $screenshot_selection_clipboard
+        Shift+p         mode "default", exec $screenshot_selection_file
+
+        # Return to default mode.
+        Escape          mode "default"
+    }
+}
+#---------------------------------------------------------------------------
+
+
+#---- Mode shutdown  ------------------------------------------------------
+set $mode_shutdown "\
+<span></span>  \
+<span> \
+<span>(<span><b>h</b></span>)</span> hibernate  \
+<span>(<b>l</b>)</span> lock  \
+<span>(<b>e</b>)</span> logout  \
+<span>(<b>r</b>)</span> reboot  \
+<span>(<b>u</b>)</span> suspend  \
+<span>(<b>s</b>)</span> shutdown \
+</span>"
+
+set $purge_cliphist [ $purge_cliphist_logout == 'true' ] && rm -f $HOME/.cache/cliphist/db || exit 0
+
+mode --pango_markup $mode_shutdown {
+    $bindsym
+    {
+        # lock
+        l           mode "default", exec $locking
+
+        # logout
+        e           exec $purge_cliphist; exec loginctl terminate-user $USER
+
+        # suspend
+        u           mode "default", exec systemctl suspend
+
+        # hibernate
+        h           mode "default", exec systemctl hibernate
+
+        # shutdown
+        s           exec $purge_cliphist; exec systemctl poweroff
+
+        # reboot
+        r           exec $purge_cliphist; exec systemctl reboot
+
+        # Return to default mode.
+        Escape      mode "default"
+    }
+}
+#---------------------------------------------------------------------------
+
+
+#---- Mode keybindings  ------------------------------------------------------
+$bindsym
+{
+    # resize
+    $layer1+r       mode $mode_resize
+
+    # recording start/stop
+    $layer2+r       mode $mode_recording
+    $layer1+Escape  exec killall -s SIGINT wf-recorder%             
+
+    # screenshot
+    Print           mode $mode_screenshot
+
+    # shutdown
+    $layer2+e       mode $mode_shutdown   
+}
+#---------------------------------------------------------------------------
+
+
+#---- Autostart  ------------------------------------------------------
+set $locking swaylock --daemonize --color "$selection" --inside-color "$selection" --inside-clear-color "$dark" --ring-color "#3B758C" --ring-clear-color "#9fca56" --ring-ver-color "#55b5db" --show-failed-attempts --fade-in 0.2 --grace 2 --effect-vignette 0.5:0.5 --effect-blur 7x5 --ignore-empty-password --screenshots --clock
+set $idle swayidle -w \
+    timeout 240 'light -G > /tmp/brightness && light -S 10' resume 'light -S $([ -f /tmp/brightness ] && cat /tmp/brightness || echo 100%)' \
+    timeout 300 'exec $locking' \
+    timeout 600 'swaymsg "output * dpms off"' \
+    resume 'swaymsg "output * dpms on"' \
+    before-sleep 'playerctl pause' \
+    before-sleep 'exec $locking'
+
+# set $notifications mako --text-color "$text-color" --border-color "$accent-color" --background-color "$background-color" --border-size 3 --width 400 --height 200 --padding 20 --margin 20 --default-timeout 15000
+set $notifications mako --text-color "#e5e9f0" --border-color "#5294e2" --background-color "#404552" --progress-color "over #eceff480" --border-size 3 --width 750 --height 400 --padding 10 --margin 10 --default-timeout 5000
+set $wob wob --anchor top --anchor center --margin 20
+
+exec_always {
+    [[ -p $WOBSOCK ]] || mkfifo $WOBSOCK && tail -f $WOBSOCK | $wob 
+    $notifications
+    '[ -x "$(command -v spice-vdagent)" ] && spice-vdagent'
+    # restart kanshi https://github.com/emersion/kanshi/issues/43#issuecomment-531679213
+    '[ -x "$(command -v kanshi)" ] && pkill kanshi; exec kanshi'
+    '[ -x "$(command -v sworkstyle)" ] && pkill sworkstyle; sworkstyle &> /tmp/sworkstyle.log'
+    '[ -x "$(command -v playerctl)" ] && pkill playerctl; playerctl -a metadata --format \'{{status}} {{title}}\' --follow | while read line; do pkill -RTMIN+5 waybar; done'
+}
+
+exec {
+    /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+    $idle
+    systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
+    hash dbus-update-activation-environment 2>/dev/null && dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
+    '[ -x "$(command -v flashfocus)" ] && flashfocus'
+    '[ -x "$(command -v wlsunset)" ] && ~/.config/sway/scripts/sunset.sh "on"'
+    '[ -x "$(command -v autotiling)" ] && autotiling'
+    '[ -x "$(command -v foot)" ] && ~/.config/sway/scripts/foot.sh --server'
+    '[ -x "$(command -v nwg-wrapper)" ] && [ -f ~/.config/nwg-wrapper/help.sh ] && ~/.config/sway/scripts/help.sh --restore'
+    '[ -x "$(command -v wl-paste)" ] && [ -x "$(command -v cliphist)" ] && wl-paste --watch cliphist store'
+    '[ -x "$(command -v wl-paste)" ] && [ -x "$(command -v cliphist)" ] && wl-paste --watch pkill -RTMIN+9 waybar'
+}
+#---------------------------------------------------------------------------
+
+
+#---- Sepcial Window rules  ------------------------------------------------------
+assign [class="Code" instance="code"] $ws1
+for_window [class="Code" instance="code"] focus
+
+assign [class="Microsoft-edge" instance="microsoft-edge"] $ws2
+for_window [class="Microsoft-edge" instance="microsoft-edge"] focus
+
+assign [app_id="firefox"] $ws2
+for_window [app_id="firefox"] focus
+
+assign [class="discord" instance="discord"] $ws3
+for_window [class="discord" instance="discord"] focus
+
+assign [class="Wfica" instance="Wfica"] $ws5
+for_window [class="Wfica" instance="Wfica"] focus
+
+assign [class="Microsoft-edge" instance="crx__oealhchffcfhioabblpbcoldfihlhgjb"] $ws5
+for_window [class="Microsoft-edge" instance="crx__oealhchffcfhioabblpbcoldfihlhgjb"] floating enable, focus
+#---------------------------------------------------------------------------
+
+
+#---- External // Clipboard------------------------------------------------------
+set $clipboard cliphist list | rofi -dmenu -p "Select item to copy" -lines 10 -width 35 -theme-str $rofi_theme | cliphist decode | wl-copy
+set $clipboard-del cliphist list | rofi -dmenu -font "$gui-font" -p "Select item to delete" -lines 10 -width 35 -theme-str $rofi_theme | cliphist delete
+#---------------------------------------------------------------------------
+

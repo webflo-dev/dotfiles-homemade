@@ -34,6 +34,8 @@ SPACESHIP_DIR_TRUNC_REPO=true
 #---------------------------------------------------------------------------
 
 
+
+
 #--- OPTIONS --------------------------------------------------------------
 setopt BANG_HIST              # Treat the '!' character specially during expansion.
 setopt EXTENDED_HISTORY       # Write the history file in the ":start:elapsed;command" format.
@@ -48,6 +50,8 @@ setopt HIST_SAVE_NO_DUPS  # Don't write duplicate entries in the history file.
 setopt HIST_REDUCE_BLANKS # Remove superfluous blanks before recording entry.
 setopt HIST_VERIFY        # Don't execute immediately upon history expansion.
 #---------------------------------------------------------------------------
+
+
 
 
 #--- EXPORT --------------------------------------------------------------
@@ -108,6 +112,7 @@ alias duf='du -sh *'
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
+alias mkdir='mkdir -p'
 
 # Make zsh know about hosts already accessed by SSH
 zstyle -e ':completion:*:(ssh|scp|sftp|rsh|rsync):hosts' hosts 'reply=(${=${${(f)"$(cat {/etc/ssh_,~/.ssh/known_}hosts(|2)(N) /dev/null)"}%%[# ]*}//,/ })'
@@ -142,12 +147,17 @@ alias keepalive-vdi="xdotool key --window $(comm -12 <(xdotool search --name 'FR
 
 
 
+
+#---LOAD EXTERNAL FILES  --------------------------------------------------------------
 if [[ -d $HOME/.zsh ]]; then
   for file in $HOME/.zsh/*.{zsh,sh}; do
     [ -r "$file" ] && [ -f "$file" ] && source "$file"
     unset file
   done
 fi
+#---------------------------------------------------------------------------
+
+
 
 
 #---FUNCTIONS (move to bin ?) --------------------------------------------------------------
@@ -168,8 +178,8 @@ function dotfiles-add () {
 }
 
 # Create a new directory and enter it
-function mkd() {
-	mkdir -p "$@" && cd "$_";
+function mkcd() {
+   mkdir -p "$@" && cd "$_";
 }
 
 # Backup a file aka copy/paste with new filename
@@ -192,41 +202,6 @@ function fif() {
     grep -rnw --exclude-dir={.git,node_modules,coverage,__snapshots__,migrations,venv,bower_components} . -e $1;
 }
 
-# Create a .tar.gz archive, using `zopfli`, `pigz` or `gzip` for compression
-function targz() {
-	local tmpFile="${@%/}.tar";
-	tar -cvf "${tmpFile}" --exclude=".DS_Store" "${@}" || return 1;
-
-	size=$(
-		stat -f"%z" "${tmpFile}" 2> /dev/null; # macOS `stat`
-		stat -c"%s" "${tmpFile}" 2> /dev/null;  # GNU `stat`
-	);
-
-	local cmd="";
-	if (( size < 52428800 )) && hash zopfli 2> /dev/null; then
-		# the .tar file is smaller than 50 MB and Zopfli is available; use it
-		cmd="zopfli";
-	else
-		if hash pigz 2> /dev/null; then
-			cmd="pigz";
-		else
-			cmd="gzip";
-		fi;
-	fi;
-
-	echo "Compressing .tar ($((size / 1000)) kB) using \`${cmd}\`…";
-	"${cmd}" -v "${tmpFile}" || return 1;
-	[ -f "${tmpFile}" ] && rm "${tmpFile}";
-
-	zippedSize=$(
-		stat -f"%z" "${tmpFile}.gz" 2> /dev/null; # macOS `stat`
-		stat -c"%s" "${tmpFile}.gz" 2> /dev/null; # GNU `stat`
-	);
-
-	echo "${tmpFile}.gz ($((zippedSize / 1000)) kB) created successfully.";
-}
-
-
 # Determine size of a file or total size of a directory
 function fs() {
 	if du -b /dev/null > /dev/null 2>&1; then
@@ -241,6 +216,8 @@ function fs() {
 	fi;
 }
 #---------------------------------------------------------------------------
+
+
 
 
 #--- USER CONFIGURATION --------------------------------------------------------------

@@ -137,8 +137,8 @@ set
 }
 
 set $left h
-set $down j
-set $up k
+set $down k
+set $up j
 set $right l
 
 # workspace names

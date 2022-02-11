@@ -75,6 +75,8 @@ export TIPZ_TEXT='💡 '
 export WEBFLO_DIR=$HOME/.webflo
 export DOTFILES_DIR=$HOME/.dotfiles-git
 export VOLTA_HOME="$HOME/.volta"
+
+export BROWSER=microsoft-edge
 #---------------------------------------------------------------------------
 
 

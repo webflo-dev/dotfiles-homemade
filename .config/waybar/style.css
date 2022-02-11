@@ -56,6 +56,7 @@
 /* Each module */
 #backlight,
 #battery,
+#bluetooth,
 #clock,
 #cpu,
 #custom-keyboard-layout,
@@ -71,6 +72,12 @@
 #tray {
   padding-left: 10px;
   padding-right: 10px;
+}
+
+#custom-scratchpad-indicator {
+  margin-left: 10px;
+  margin-right: 10px;
+  color: #d9b64e;
 }
 
 /* -----------------------------------------------------------------------------
@@ -102,7 +109,8 @@
 }
 
 #clock {
-  font-weight: bold;
+  font-weight: bolder;
+  color: #d9b64e;
 }
 
 #cpu {

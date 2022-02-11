@@ -10,6 +10,12 @@
  * Keyframes
  * -------------------------------------------------------------------------- */
 
+/*
+Arc-Dark Color Scheme
+*/
+@define-color highlight #5294e2;
+@define-color base1  #404552;
+
 @keyframes blink-warning {
   70% {
     color: white;
@@ -33,49 +39,50 @@
 }
 
 /* -----------------------------------------------------------------------------
-* Base styles
-* -------------------------------------------------------------------------- */
+ * Base styles
+ * -------------------------------------------------------------------------- */
 
 /* Reset all styles */
 * {
   border: none;
   border-radius: 0;
   min-height: 0;
-  margin: 0;
+  margin: 1px;
   padding: 0;
 }
 
 /* The whole bar */
 #waybar {
-  background: #323232;
-  color: white;
-  font-family: "Noto Sans, Cantarell, Font Awesome 6 Free";
-  font-size: 13px;
+  background: transparent;
+  color: #bebebe;
+  background-color: @base1;
+  font-family: "Noto Sans,Font Awesome 6 Free";
+  /* font-family: "Noto Sans,Font Awesome 6 Free,Font Awesome 6 Free Solid"; */
+  font-size: 14px;
 }
 
-/* Each module */
-#backlight,
+/* Every modules */
 #battery,
 #clock,
+#backlight,
 #cpu,
 #custom-keyboard-layout,
-#custom-sunset,
-#custom-weather,
-#idle_inhibitor,
 #memory,
 #mode,
+#custom-weather,
 #network,
 #pulseaudio,
-#language,
 #temperature,
-#tray {
-  padding-left: 10px;
-  padding-right: 10px;
+#tray,
+#idle_inhibitor,
+#custom-PBPbattery {
+  padding: 0.5rem 0.6rem;
+  margin: 1px 0px;
 }
 
 /* -----------------------------------------------------------------------------
-* Module styles
-* -------------------------------------------------------------------------- */
+ * Modules styles
+ * -------------------------------------------------------------------------- */
 
 #battery {
   animation-timing-function: linear;
@@ -101,14 +108,6 @@
   animation-duration: 2s;
 }
 
-#clock {
-  font-weight: bold;
-}
-
-#cpu {
-  /* No styles */
-}
-
 #cpu.warning {
   color: orange;
 }
@@ -131,18 +130,16 @@
   color: red;
   animation-name: blink-critical;
   animation-duration: 2s;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 #mode {
-  background: #88c9f2;
-  color: #011c26;
-  border-top: 2px solid white;
-  /* To compensate for the top border and still have vertical centering */
-  padding-bottom: 2px;
-}
-
-#network {
-  /* No styles */
+  background: @highlight;
+  border-bottom: 3px transparent;
+  color: white;
+  margin-left: 5px;
+  padding: 7;
 }
 
 #network.disconnected {
@@ -150,52 +147,55 @@
 }
 
 #pulseaudio {
-  /* No styles */
+  padding-top: 6px;
 }
 
 #pulseaudio.muted {
-  /* No styles */
-}
-
-#custom-spotify {
-  color: rgb(102, 220, 105);
-}
-
-#temperature {
-  /* No styles */
+  color: @highlight;
 }
 
 #temperature.critical {
   color: red;
 }
 
-#tray {
-  /* No styles */
-}
-
 #window {
   font-weight: bold;
-  margin-left: 10px;
+}
+
+#workspaces {
+  font-size: 13px;
 }
 
 #workspaces button {
-  border-top: 2px solid transparent;
-  /* To compensate for the top border and still have vertical centering */
-  padding-bottom: 2px;
-  padding-left: 10px;
-  padding-right: 10px;
-  color: #888888;
+  border-bottom: 3px solid transparent;
+  margin-bottom: 0px;
+  padding: 0px;
 }
 
 #workspaces button.focused {
-  color: white;
-  /* border-color: #4c7899; */
-  /* background-color: #285577; */
-  background-color: #368abf;
-  border-color: #d9b64e;
+  border-bottom: 3px solid @highlight;
+  margin-bottom: 1px;
+  padding-left: 0;
 }
 
 #workspaces button.urgent {
   border-color: #c9545d;
   color: #c9545d;
+}
+
+#custom-power {
+  margin-left: 15px;
+  margin-right: 15px;
+  font-size: 15px;
+}
+
+#custom-launcher {
+  font-size: 15px;
+  margin-left: 15px;
+  margin-right: 10px;
+}
+
+#backlight.icon {
+  padding-right: 1px;
+  font-size: 13px;
 }

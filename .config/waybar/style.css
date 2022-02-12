@@ -49,7 +49,9 @@
 #waybar {
   background: #323232;
   color: white;
-  font-family: "Noto Sans, Cantarell, Font Awesome 6 Free";
+  /* font-family: "Noto Sans, Cantarell, RobotoMono Nerd Font"; */
+  /* font-family: "Noto Sans, Cantarell, Font Awesome 6 Free"; */
+  font-family: "Noto Sans, Font Awesome 6 Free";
   font-size: 13px;
 }
 
@@ -108,6 +110,10 @@
   animation-duration: 2s;
 }
 
+#bluetooth {
+  font-family: "RobotoMono Nerd Font";
+}
+
 #clock {
   font-weight: bolder;
   color: #d9b64e;
@@ -162,7 +168,7 @@
 }
 
 #pulseaudio.muted {
-  /* No styles */
+  color: #368abf;
 }
 
 #custom-spotify {

@@ -85,8 +85,10 @@
     "format": "{icon}",
     "interval": 30,
     "format-icons": {
-      "enabled": "", // Icon: bluetooth
-      "disabled": "" // Icon: bluetooth-disabled
+      "enabled": "", // Font "roboto nerd fond"
+      "disabled": "",// Font "roboto nerd fond"
+      // "enabled": "", // Icon: bluetooth
+      // "disabled": "" // Icon: bluetooth-disabled
     },
     "on-click": "blueberry",
     "tooltip-format": "{}"

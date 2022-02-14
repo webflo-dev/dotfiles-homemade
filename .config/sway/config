@@ -266,24 +266,12 @@ $bindsym
 
 #---- Utilities keybinds------------------------------------------------------
 
-# audio control
-set $sink_volume pactl get-sink-volume @DEFAULT_SINK@ | grep '^Volume:' | cut -d / -f 2 | tr -d ' ' | sed 's/%//'
-set $source_volume pactl get-source-volume @DEFAULT_SOURCE@ | grep '^Volume:' | cut -d / -f 2 | tr -d ' ' | sed 's/%//'
-set $volume_down $(pactl set-sink-volume @DEFAULT_SINK@ -5% && $sink_volume) > $WOBSOCK
-set $volume_up $(pactl set-sink-volume @DEFAULT_SINK@ +5% && $sink_volume) > $WOBSOCK
-set $volume_mute $(pactl set-sink-mute @DEFAULT_SINK@ toggle && pactl get-sink-mute @DEFAULT_SINK@ | sed -En "/no/ s/.*/$($sink_volume)/p; /yes/ s/.*/0/p") > $WOBSOCK
-set $mic_mute $(pactl set-source-mute @DEFAULT_SOURCE@ toggle && pactl get-source-mute @DEFAULT_SOURCE@ | sed -En "/no/ s/.*/$($source_volume)/p; /yes/ s/.*/0/p") > $WOBSOCK
-
 $bindsym
 {
     # audio control
-    # XF86AudioRaiseVolume    pamixer -ui 2 && pamixer --get-volume > $WOBSOCK
-    # XF86AudioLowerVolume    pamixer -ud 2 && pamixer --get-volume > $WOBSOCK
-    # XF86AudioMute           pamixer --toggle-mute && ( pamixer --get-mute && echo 0 > $WOBSOCK ) || pamixer --get-volume > $WOBSOCK
-    XF86AudioRaiseVolume    exec $volume_up
-    XF86AudioLowerVolume    exec $volume_down
-    XF86AudioMute           exec $volume_mute
-    XF86AudioMicMute        exec $mic_mute
+    XF86AudioRaiseVolume    pamixer -ui 2 && pamixer --get-volume > $WOBSOCK
+    XF86AudioLowerVolume    pamixer -ud 2 && pamixer --get-volume > $WOBSOCK
+    XF86AudioMute           pamixer --toggle-mute && ( pamixer --get-mute && echo 0 > $WOBSOCK ) || pamixer --get-volume > $WOBSOCK
 
     # brightness control
     XF86MonBrightnessDown   exec brightnessctl set 5%- | sed -En 's/.*\(([0-9]+)%\).*/\1/p' > $WOBSOCK
@@ -463,7 +451,13 @@ set $idle swayidle -w \
 set $notifications mako --text-color "#e5e9f0" --border-color "#5294e2" --background-color "#404552" --progress-color "over #eceff480" --border-size 3 --width 750 --height 400 --padding 10 --margin 10 --default-timeout 5000
 set $wob wob --anchor top --anchor center --margin 20
 
+# Clamshell Mode
+set $laptop <eDP-1>
+bindswitch --reload --locked lid:on output $laptop disable
+bindswitch --reload --locked lid:off output $laptop enable
+
 exec_always {
+    ~/.config/sway/scripts/clamshell.sh
     [[ -p $WOBSOCK ]] || mkfifo $WOBSOCK && tail -f $WOBSOCK | $wob 
     $notifications
     nm-applet --indicator
@@ -490,8 +484,29 @@ exec {
 #---------------------------------------------------------------------------
 
 
-#---- Sepcial Window rules  ------------------------------------------------------
+#---- Quake-like  ------------------------------------------------------
+set  {
+  $quakelike_id quake-like
+  $quakelike footclient -a quake-like
+}
 
+for_window {
+  # terminal
+  [app_id=$quakelike_id] {
+    move to scratchpad
+    [app_id=$quakelike_id] scratchpad show
+    border none, move position center, resize set width 100 ppt height 100 ppt
+  }
+}
+
+bindsym --to-code {
+  # Terminal
+  F9      exec swaymsg [app_id=$quakelike_id]  scratchpad show || exec $quakelike , border none, move position center, resize set width 100 ppt height 100 ppt
+}
+#---------------------------------------------------------------------------
+
+
+#---- Sepcial Window rules  ------------------------------------------------------
 # set floating (nontiling)for apps needing it:
 for_window [class="Yad" instance="yad"] floating enable
 for_window [app_id="yad"] floating enable
@@ -514,15 +529,11 @@ for_window [window_type="dialog"] floating enable
 for_window [window_type="menu"] floating enable
 for_window [window_role="About"] floating enable
 for_window [title="File Operation Progress"] floating enable, border pixel 1, sticky enable, resize set width 40 ppt height 30 ppt
-for_window [app_id="firefox" title="Library"] floating enable, border pixel 1, sticky enable, resize set width 40 ppt height 30 ppt
-for_window [app_id="floating_shell_portrait"] floating enable, border pixel 1, sticky enable, resize set width 30 ppt height 40 ppt
-for_window [title="Picture in picture"] floating enable, sticky enable
 for_window [title="nmtui"] floating enable,  resize set width 50 ppt height 70 ppt
 for_window [title="htop"] floating enable, resize set width 50 ppt height 70 ppt
 for_window [app_id="xsensors"] floating enable
 for_window [title="Save File"] floating enable
 for_window [app_id="firefox" title="Firefox — Sharing Indicator"] kill
-
 
 for_window [instance="lxappearance"] floating enable
 for_window [app_id="floating_shell_portrait"] floating enable, border pixel 1, sticky enable, resize set width 30 ppt height 40 ppt
@@ -537,19 +548,30 @@ for_window [title="^wlay$"] floating enable
 
 
 # webflo app default
+
 assign [class="Code" instance="code"] $ws1
 for_window [class="Code" instance="code"] focus
 
 assign [class="Microsoft-edge" instance="microsoft-edge"] $ws2
 for_window [class="Microsoft-edge" instance="microsoft-edge"] focus
 
-assign [app_id="firefox"] $ws2
-assign [class="firefox"] $ws2
-for_window [app_id="firefox"] focus
-for_window [class="firefox"] focus
+assign {
+    [app_id="firefox"] $ws2
+    [class="firefox"] $ws2
+}
+for_window {
+    [app_id="firefox"] focus
+    [class="firefox"] focus
+}
 
-assign [class="discord" instance="discord"] $ws3
-for_window [class="discord" instance="discord"] focus
+assign {
+    [class="discord" instance="discord"] $ws3
+    [class="Microsoft-edge" instance="crx__ophkgndjonnnhbijdenodjknmkdmlhel"] $ws3
+}
+for_window {
+    [class="discord" instance="discord"] focus
+    [class="Microsoft-edge" instance="crx__ophkgndjonnnhbijdenodjknmkdmlhel"] focus
+}
 
 assign [class="Wfica" instance="Wfica"] $ws5
 for_window [class="Wfica" instance="Wfica"] focus
@@ -564,3 +586,7 @@ set $clipboard cliphist list | rofi -dmenu -p "Select item to copy" -lines 10 -w
 set $clipboard-del cliphist list | rofi -dmenu -font "$gui-font" -p "Select item to delete" -lines 10 -width 35 -theme-str $rofi_theme | cliphist delete
 #---------------------------------------------------------------------------
 
+
+#---- Autostart applications ------------------------------------------------------
+# exec swaymsg "exec discord-pwa;"
+#---------------------------------------------------------------------------

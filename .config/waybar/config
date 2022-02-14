@@ -43,7 +43,6 @@
     "custom/sunset",
 
     "tray"
-    // "wlr/taskbar"
   ],
 
   // -------------------------------------------------------------------------
@@ -86,7 +85,7 @@
     "interval": 30,
     "format-icons": {
       "enabled": "", // Font "roboto nerd fond"
-      "disabled": "",// Font "roboto nerd fond"
+      "disabled": "" // Font "roboto nerd fond"
       // "enabled": "", // Icon: bluetooth
       // "disabled": "" // Icon: bluetooth-disabled
     },

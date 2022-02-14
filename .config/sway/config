@@ -588,5 +588,6 @@ set $clipboard-del cliphist list | rofi -dmenu -font "$gui-font" -p "Select item
 
 
 #---- Autostart applications ------------------------------------------------------
-# exec swaymsg "exec discord-pwa;"
+# exec swaymsg "exec discord;"
+# exec swaymsg "exec /opt/microsoft/msedge/microsoft-edge --profile-directory=Default --app-id=ophkgndjonnnhbijdenodjknmkdmlhel;"
 #---------------------------------------------------------------------------
